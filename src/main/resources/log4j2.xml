@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+
+    <Properties>
+		<!-- calea unde sa imi genereze fisierul de log, in cazul asta rootul proiectului; putem pune si path din windows-->
+        <Property name = "logPath" >logs</Property>
+    </Properties>
+    <Appenders>
+		<!-- patternul sub care va salva fisierul de log, denumirea cu timestamp -->
+        <RollingFile name = "fileLogger"  filePattern = "${logPath}//LOG-%d{yyyy-MM-dd-HH-mmss}_log.log" >
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy/>
+            </Policies>
+        </RollingFile>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="log4j.rootLogger" level="trace">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="fileLogger"/>
+        </Logger>
+        <!-- nivelul de logging, putem pune trace, info, debug etc, cat de multa info vrem sa vedem in log-->
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="fileLogger"/>
+
+        </Root>
+    </Loggers>
+</Configuration>
