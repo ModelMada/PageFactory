@@ -23,16 +23,17 @@ import com.google.common.io.Files;
 
 import pages.BasePage;
 
-public class BaseTest {
+public class BaseTest extends Driver {
 
 	public BasePage app; //app poate sa cheme toate metodele din Base Page
-	public static WebDriver driver;		//obiectul va fi instantiat inainte de instantierea claselor, va avea aceeasi valoarea in toate clasele//vreau sa fie accesibil obiectul , este null, reprezinta browseru nostru
+	public WebDriver driver;		//obiectul va fi instantiat inainte de instantierea claselor, va avea aceeasi valoarea in toate clasele//vreau sa fie accesibil obiectul , este null, reprezinta browseru nostru
 	
-	@Parameters({"appURL"})			//parametrul se va folosi peste tot in metoda unde avem variabila de URL, la metoda adaugam un parametru de tip String url
+	@Parameters({"appURL","browser"})			//parametrul se va folosi peste tot in metoda unde avem variabila de URL, la metoda adaugam un parametru de tip String url
 	@BeforeClass(alwaysRun = true)
-	public void setup(String appURL) {
+	public void setup(String appURL, String browser) {
 		
-		driver = new ChromeDriver();		
+		//driver = new ChromeDriver();	
+		driver = initDriver(browser);
 		driver.manage().window().maximize();		//face maximize la browser
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));	//setupul se propaga pe toata rularea, orice findElem va activa implicit wait. se pune in base test ca best practice, nu are sens sa il folosim in test
 		driver.get(appURL);

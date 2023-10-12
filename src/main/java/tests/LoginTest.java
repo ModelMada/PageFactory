@@ -31,9 +31,9 @@ public class LoginTest extends BaseTest {
 		app.click(app.menu.myAccountLink);
 		app.myAccount.loginInApp(username, password);
 		//ambele asserturi fac acelasi lucru
-		assertTrue(app.checkElementIsDisplayed(app.myAccount.usernameGreetings));
+		assertTrue(app.checkElementIsDisplayed(app.myAccount.loginErrorMsg));
 		Screenshots.screenshot(driver);
-		assertTrue(app.myAccount.usernameGreetings.isDisplayed());
+		assertTrue(app.myAccount.loginErrorMsg.isDisplayed());
 		
 	}
 }
