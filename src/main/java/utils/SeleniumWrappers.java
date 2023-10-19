@@ -1,22 +1,48 @@
 package utils;
 
 import java.time.Duration;
+import java.util.NoSuchElementException;
+
+import javax.naming.NoInitialContextException;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.TestException;
 
 //aici scriem metodele care sunt generice pentru mai multe clase
 //le putem reutiliza si pt alte elemente
+
+/**
+ * Class used to wrap existing selenium methods and enhance them with additional functionalities
+ * like retry mechanism, logging, etc
+ * new methods can be added based on existing model
+ * @author madalinamodel
+ * 
+ * 
+ */
 
 public class SeleniumWrappers extends BaseTest {
 
 	public SeleniumWrappers(WebDriver driver) {
 		this.driver=driver;
 	}
+	
+	/**
+	 * Wrapper method over selenium default click() method enhannced with
+	 *1. waitForEleement to be clickable
+	 *2. Retry ,echanism for StaleElement
+	 *3. Logging for noSuchElementException
+	 * 
+	 * @param WebElement
+	 * 
+	 * 
+	 * 
+	 */
 	
 	public void click(WebElement element) {
 		Log.info("called method <click> on element " + element);
@@ -25,8 +51,15 @@ public class SeleniumWrappers extends BaseTest {
 			wait.until(ExpectedConditions.elementToBeClickable(element));
 			// WebElement element = driver.findElement(element); //avem deja webElement
 			element.click();
-		}catch(Exception e) {
-			
+		}catch(NoSuchElementException e) {
+			Log.error("Element not found in method <click()> after 10 sec wait " + element);
+			Log.error(e.getMessage());
+			throw new TestException("Element not found in method click");
+		}catch (StaleElementReferenceException e)
+		{
+			//mai incerci o data, retry
+			Log.error("StaleException not found on element " + element);
+			element.click();
 		}
 	}
 	
